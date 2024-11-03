@@ -1,0 +1,65 @@
+<!-- templates/dashboard.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto">
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold">Tableau de bord</h2>
+        <button onclick="document.getElementById('newTaskForm').classList.toggle('hidden')"
+                class="bg-green-500 text-white px-4 py-2 rounded">
+            Nouvelle tâche
+        </button>
+    </div>
+
+    <div id="newTaskForm" class="hidden bg-white p-4 rounded shadow mb-6">
+        <form method="POST" action="{{ url_for('create_task') }}" class="space-y-4">
+            <div>
+                <label class="block mb-1">Titre de la tâche</label>
+                <input type="text" name="title" class="w-full border p-2 rounded" required>
+            </div>
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Créer</button>
+        </form>
+    </div>
+
+    <div class="space-y-4">
+        {% if tasks %}
+        {% for task in tasks %}
+        <div class="bg-white p-4 rounded shadow flex justify-between items-center">
+                    <span class="{% if task.completed %}line-through text-gray-500{% endif %}">
+                        {{ task.title }}
+                    </span>
+            <div class="space-x-2">
+                <form method="POST" action="{{ url_for('toggle_task', task_id=task.id) }}" class="inline">
+                    <button type="submit"
+                            class="{% if task.completed %}bg-yellow-500{% else %}bg-green-500{% endif %} text-white px-3 py-1 rounded">
+                        {% if task.completed %}Annuler{% else %}Terminer{% endif %}
+                    </button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <p class="text-center text-gray-500">Aucune tâche pour le moment</p>
+        {% endif %}
+    </div>
+
+    <div class="mt-8 text-center">
+        <h3 class="text-lg font-bold mb-4">Test des erreurs</h3>
+        <div class="space-x-2">
+            <a href="{{ url_for('trigger_error', type='division') }}"
+               class="bg-red-500 text-white px-3 py-1 rounded">
+                Erreur Division
+            </a>
+            <a href="{{ url_for('trigger_error', type='key') }}"
+               class="bg-red-500 text-white px-3 py-1 rounded">
+                Erreur Clé
+            </a>
+            <a href="{{ url_for('trigger_error', type='type') }}"
+               class="bg-red-500 text-white px-3 py-1 rounded">
+                Erreur Type
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+Last edited just

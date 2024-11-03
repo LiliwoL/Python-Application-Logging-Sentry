@@ -1,0 +1,40 @@
+<!-- templates/base.html -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Demo Sentry{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+<nav class="bg-blue-600 p-4">
+    <div class="container mx-auto flex justify-between items-center">
+        <a href="{{ url_for('index') }}" class="text-white font-bold">Demo Sentry</a>
+        <div>
+            {% if current_user.is_authenticated %}
+            <span class="text-white mr-4">{{ current_user.username }}</span>
+            <a href="{{ url_for('logout') }}" class="text-white">Déconnexion</a>
+            {% else %}
+            <a href="{{ url_for('login') }}" class="text-white mr-4">Connexion</a>
+            <a href="{{ url_for('register') }}" class="text-white">Inscription</a>
+            {% endif %}
+        </div>
+    </div>
+</nav>
+
+<div class="container mx-auto mt-8">
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+</div>
+</body>
+</html>
